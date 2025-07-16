@@ -3,12 +3,12 @@
 import { Separator } from '@radix-ui/react-dropdown-menu';
 import { format } from "date-fns";
 import {
-  Activity,
+  // Activity,
   Calendar as CalendarIcon,
-  DollarSign,
-  FileText,
+  // DollarSign,
+  // FileText,
   RefreshCcw,
-  Users,
+  // Users,
 } from 'lucide-react';
 import React from 'react';
 
