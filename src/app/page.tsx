@@ -1,17 +1,18 @@
 'use client';
 
-import React from 'react';
-import DashboardLayout from '@/components/layout/DashboardLayout';
-import {
-  Users,
-  TrendingUp,
-  FileText,
-  Activity,
-  DollarSign,
-  RefreshCcw,
-  Calendar as CalendarIcon,
-} from 'lucide-react';
+import { Separator } from '@radix-ui/react-dropdown-menu';
 import { format } from "date-fns";
+import {
+  Activity,
+  Calendar as CalendarIcon,
+  DollarSign,
+  FileText,
+  RefreshCcw,
+  Users,
+} from 'lucide-react';
+import React from 'react';
+
+import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -19,21 +20,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Separator } from '@radix-ui/react-dropdown-menu';
 
-const stats = [
-  { name: 'Total Users', value: '2,847', change: '+12%', changeType: 'positive', icon: Users },
-  { name: 'Revenue', value: '$45,231', change: '+8.2%', changeType: 'positive', icon: DollarSign },
-  { name: 'Active Sessions', value: '1,234', change: '+5.4%', changeType: 'positive', icon: Activity },
-  { name: 'Reports Generated', value: '89', change: '+2.1%', changeType: 'positive', icon: FileText },
-];
+// const stats = [
+//   { name: 'Total Users', value: '2,847', change: '+12%', changeType: 'positive', icon: Users },
+//   { name: 'Revenue', value: '$45,231', change: '+8.2%', changeType: 'positive', icon: DollarSign },
+//   { name: 'Active Sessions', value: '1,234', change: '+5.4%', changeType: 'positive', icon: Activity },
+//   { name: 'Reports Generated', value: '89', change: '+2.1%', changeType: 'positive', icon: FileText },
+// ];
 
-const recentActivity = [
-  { id: 1, user: 'John Doe', action: 'Created new report', time: '2 minutes ago' },
-  { id: 2, user: 'Jane Smith', action: 'Updated user profile', time: '5 minutes ago' },
-  { id: 3, user: 'Mike Johnson', action: 'Deleted old records', time: '10 minutes ago' },
-  { id: 4, user: 'Sarah Wilson', action: 'Generated analytics', time: '15 minutes ago' },
-];
+// const recentActivity = [
+//   { id: 1, user: 'John Doe', action: 'Created new report', time: '2 minutes ago' },
+//   { id: 2, user: 'Jane Smith', action: 'Updated user profile', time: '5 minutes ago' },
+//   { id: 3, user: 'Mike Johnson', action: 'Deleted old records', time: '10 minutes ago' },
+//   { id: 4, user: 'Sarah Wilson', action: 'Generated analytics', time: '15 minutes ago' },
+// ];
 
 export default function DashboardPage() {
   const [date, setDate] = React.useState<Date>();

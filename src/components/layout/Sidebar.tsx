@@ -1,27 +1,27 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard,
-  UserRoundCheck,
   Bandage,
   BookPlus,
-  Scroll,
-  MessageCircleMore,
-  ShoppingCart,
-  ChartNoAxesColumnIncreasing,
-  SquareX,
-  GitCompareArrows,
-  FileQuestionIcon,
-  Receipt,
   BrickWall,
-  Settings,
-  MessageCircle,
+  ChartNoAxesColumnIncreasing,
   Clock,
+  FileQuestionIcon,
+  GitCompareArrows,
+  LayoutDashboard,
+  MessageCircle,
+  MessageCircleMore,
+  Receipt,
+  Scroll,
+  Settings,
+  ShoppingCart,
+  SquareX,
+  UserRoundCheck,
   X,
 } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import React from 'react';
 
 interface SidebarProps {
   isOpen: boolean;

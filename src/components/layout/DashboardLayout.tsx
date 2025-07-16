@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import TopNavigation from './TopNavigation';
+
 import Sidebar from './Sidebar';
+import TopNavigation from './TopNavigation';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
