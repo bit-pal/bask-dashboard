@@ -63,30 +63,31 @@ import {
 const filterData = [
     { index: "test", value: "Test mode" },
     { index: "show", value: "Show archived" },
-    { index: "chat", value: "Unread chats" },
+    { index: "messages", value: "Unread messages" },
+    { index: "payments", value: "Failed Draft Payments" },
+    { index: "plan", value: "Billing Plan" },
 ]
 
 const viewData = [
-    { index: "checkbox", value: "Checkbox" },
+    { index: "id", value: "Id" },
     { index: "name", value: "Name" },
-    { index: "date", value: "Start Date" },
-    { index: "mrn", value: "Mrn" },
-    { index: "subscription", value: "Subscription" },
-    { index: "product", value: "Product Name" },
+    { index: "created-at", value: "Created At" },
+    { index: "mrn-no", value: "Mrn No" },
     { index: "email", value: "Email" },
     { index: "phone", value: "Phone" },
-    { index: "orders", value: "Number Of Orders" },
+    { index: "orders", value: "Orders" },
     { index: "location", value: "Location" },
-    { index: "status", value: "Patient Status" },
+    { index: "treatment-status", value: "Treatment Status" },
+    { index: "fulfillment-status", value: "Fulfillment Status" },
+    { index: "visit-status", value: "Visit Status" },
     { index: "last-order", value: "Last Order" },
-    { index: "shipping-date", value: "Next Shipping Date" },
-    { index: "follow", value: "Follow Up" },
-    { index: "archived", value: "Archived At" },
-    { index: "test", value: "Test Mode" },
-    { index: "chat", value: "Unread Chats" },
-    { index: "product-status", value: "Digital Product Status" },
-    { index: "product-price", value: "Digital Product Price" },
-    { index: "questionnaire", value: "Questionnaire Id" },
+    { index: "next-shipping-date", value: "Next Shipping Date" },
+    { index: "visit-master-id", value: "Visit Master Id" },
+    { index: "archived-at", value: "Archived At" },
+    { index: "has-failed-draft", value: "Has Failed Draft" },
+    { index: "has-billing-plan", value: "Has Billing Plan" },
+    { index: "test-mode", value: "Test Mode" },
+    { index: "unread-messages", value: "Unread Messages" },
 ]
 
 const refillsData = [
@@ -105,22 +106,19 @@ const visitStatusData = [
     { index: "scheduling", value: "Scheduling" },
 ]
 
-const patientStatusData = [
-    { index: "declined", value: "Declined" },
-    { index: "denied", value: "Denied" },
-    { index: "abandoned", value: "Abandoned" },
-    { index: "consult-only", value: "Consult Only" },
-    { index: "delivered", value: "Delivered" },
-    { index: "shipped", value: "Shipped" },
-    { index: "sent", value: "Sent" },
+const tratementsStatusData = [
     { index: "pending", value: "Pending" },
-    { index: "on-hold", value: "On Hold" },
-    { index: "blacklisted", value: "Blacklisted" },
+    { index: "active", value: "Active" },
+    { index: "paused", value: "Paused" },
+    { index: "completed", value: "Completed" },
+    { index: "cancelled", value: "Cancelled" },
+    { index: "payment-error", value: "Payment Error" },
+    { index: "doctor-error", value: "Doctor Error" },
 ]
 
 const data: any[] = []
 
-export function PatientsTable() {
+export function TreatmentsTable() {
     const columns = React.useMemo(() => getColumns(), [])
     const [date, setDate] = React.useState<Date>();
     const [sorting, setSorting] = React.useState<SortingState>([])
@@ -161,7 +159,7 @@ export function PatientsTable() {
             <div className="flex items-center justify-between pt-4 px-4 gap-2">
                 <div className="flex justify-start gap-2 flex-1">
                     <Input
-                        placeholder="Search by Patient ID, name, email, phone number, MRN#"
+                        placeholder="Search by name, treatment ID, email, phone or MRN#"
                         value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
                         onChange={handleSearchChange}
                         className="min-w-[420px] max-w-[672px] outline-none focus:outline-none focus:border-none flex-1"
@@ -211,7 +209,7 @@ export function PatientsTable() {
                                 <span>View</span>
                             </Button>
                         </DropdownMenuTrigger>
-                        <FilterDropdown data={viewData} placeholder="View" height />
+                        <FilterDropdown data={viewData} placeholder="View" height clear />
                     </DropdownMenu>
                     <Button variant="ghost" className='flex relative justify-center items-center border border-gray-300 font-bold p-3 bg-white hover:bg-blue-300 text-gray-500 hover:text-white'>
                         <Download />
@@ -245,10 +243,10 @@ export function PatientsTable() {
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className='flex relative justify-center items-center border border-gray-400 p-3 bg-white hover:bg-blue-300 text-gray-600 hover:text-white h-8 font-bold'>
                             <CirclePlus />
-                            <span>Patient Status</span>
+                            <span>Treatments Status</span>
                         </Button>
                     </DropdownMenuTrigger>
-                    <FilterDropdown data={patientStatusData} placeholder="Patient status" height />
+                    <FilterDropdown data={tratementsStatusData} placeholder="Treatments status" />
                 </DropdownMenu>
             </div>
             <div className="border grid grid-cols-1 pb-3">
@@ -294,18 +292,14 @@ export function PatientsTable() {
                                     colSpan={columns.length}
                                     className="w-full h-[400px]"
                                 >
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                    <div className="absolute inset-0 flex flex-col items-center justify-start mt-20">
                                         <NoPatientsImage width={176} height={176} />
                                         <div className="flex flex-col justify-center items-center gap-4 max-w-[520px]">
-                                            <p className="text-blue-500 font-bold text-sm">Everything patients-related in a single place</p>
+                                            <p className="text-blue-500 font-bold text-sm">Everything treatments-related in a single place</p>
                                             <p className="text-gray-400 font-bold text-sm text-center">
-                                                Once you’ve gotten your first patient, you’ll be able to update their details, get a summary of their order history, create segments to send personalized communications that drive sales and more. You can also add a patients below.
+                                                Once you’ve gotten your first treatment, you’ll be able to update its details.
                                             </p>
                                         </div>
-                                        <Button className='flex items-center justify-center gap-2 bg-blue-400 hover:bg-blue-500 font-bold mt-8'>
-                                            <Plus />
-                                            Add New
-                                        </Button>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -337,7 +331,7 @@ export function PatientsTable() {
                         </Select>
                     </div>
                     <div className="text-muted-foreground text-sm font-bold">
-                        Page 1 of 0
+                        Page 1
                     </div>
                     <div className="space-x-2">
                         <Button

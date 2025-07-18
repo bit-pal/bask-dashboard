@@ -34,7 +34,7 @@ const navigation = [
   {
     name: 'Treatments', icon: Bandage, subMenu: [
       { name: 'Treatments', href: '/treatments' },
-      { name: 'Configs', href: '/treatements/configs' }
+      { name: 'Configs', href: '/treatments/configs' }
     ]
   },
   { name: 'Orders', href: '/orders', icon: BookPlus },

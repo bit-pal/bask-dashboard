@@ -1,12 +1,12 @@
 "use client"
 
-import { Patients } from "./data-type"
+import { Treatments } from "./data-type"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 
-export function getColumns(): ColumnDef<Patients>[] {
+export function getColumns(): ColumnDef<Treatments>[] {
     return [
         {
             id: "select",
@@ -81,50 +81,18 @@ export function getColumns(): ColumnDef<Patients>[] {
             cell: ({ row }) => <div className="lowercase">{row.getValue("mrn")}</div>,
         },
         {
-            accessorKey: "subscription",
-            header: "Subscription",
-            cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("subscription")}</div>
-            ),
-        },
-        {
-            accessorKey: "product-name",
-            header: "Product Name",
-            cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("product-name")}</div>
-            ),
-        },
-        {
             accessorKey: "email",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                        className="h-full rounded-xl hover:bg-gray-300 hover:text-inherit"
-                    >
-                        Email
-                        <ArrowUpDown />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+            header: "Email",
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue("email")}</div>
+            ),
         },
         {
             accessorKey: "phone-number",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                        className="h-full rounded-xl hover:bg-gray-300 hover:text-inherit"
-                    >
-                        Phone number
-                        <ArrowUpDown />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => <div className="lowercase">{row.getValue("phone-number")}</div>,
+            header: "Phone number",
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue("phone-number")}</div>
+            ),
         },
         {
             accessorKey: "orders",
@@ -141,10 +109,17 @@ export function getColumns(): ColumnDef<Patients>[] {
             ),
         },
         {
-            accessorKey: "patient-status",
-            header: "Patient Status",
+            accessorKey: "treatment-status",
+            header: "Treat. Status",
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("patient-status")}</div>
+                <div className="capitalize">{row.getValue("treatment-status")}</div>
+            ),
+        },
+        {
+            accessorKey: "fulfil-status",
+            header: "Fulfil. Status",
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue("fulfil-status")}</div>
             ),
         },
         {
@@ -162,17 +137,17 @@ export function getColumns(): ColumnDef<Patients>[] {
             ),
         },
         {
-            accessorKey: "next-refill",
-            header: "Next Refill",
+            accessorKey: "next-shipping-date",
+            header: "Next Shipping Date",
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("next-refill")}</div>
+                <div className="capitalize">{row.getValue("next-shipping-date")}</div>
             ),
         },
         {
-            accessorKey: "follow-up",
-            header: "Follow Up",
+            accessorKey: "visit-master-id",
+            header: "Visit Master ID",
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("follow-up")}</div>
+                <div className="capitalize">{row.getValue("visit-master-id")}</div>
             ),
         },
         {
@@ -183,6 +158,20 @@ export function getColumns(): ColumnDef<Patients>[] {
             ),
         },
         {
+            accessorKey: "failed-draft-payment",
+            header: "Failed Draft Payment",
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue("failed-draft-payment")}</div>
+            ),
+        },
+        {
+            accessorKey: "billing-plan",
+            header: "Billing Plan",
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue("billing-plan")}</div>
+            ),
+        },
+        {
             accessorKey: "test-mode",
             header: "Test Mode",
             cell: ({ row }) => (
@@ -190,31 +179,10 @@ export function getColumns(): ColumnDef<Patients>[] {
             ),
         },
         {
-            accessorKey: "unread-chats",
-            header: "Unread chats",
+            accessorKey: "unread-messages",
+            header: "Unread Messages",
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("unread-chats")}</div>
-            ),
-        },
-        {
-            accessorKey: "digital-product-status",
-            header: "Digital product status",
-            cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("digital-product-status")}</div>
-            ),
-        },
-        {
-            accessorKey: "digital-product-price",
-            header: "Digital product price",
-            cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("digital-product-price")}</div>
-            ),
-        },
-        {
-            accessorKey: "questionnaire-id",
-            header: "Questionnaire ID",
-            cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("questionnaire-id")}</div>
+                <div className="capitalize">{row.getValue("unread-messages")}</div>
             ),
         },
     ]
