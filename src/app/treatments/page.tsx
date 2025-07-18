@@ -7,7 +7,6 @@ import {
 } from 'lucide-react';
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
-
 import { Button } from "@/components/ui/button"
 import {
   Tabs,
@@ -15,14 +14,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-
-const tabData = [
-  { value: "all", title: "All" },
-  { value: "active", title: "Active" },
-  { value: "pending", title: "Pending" },
-  { value: "abandoned", title: "Abandoned" },
-  { value: "canceled", title: "Canceled" },
-]
 
 export default function PatientsPage() {
   return (

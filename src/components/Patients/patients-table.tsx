@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { format } from "date-fns";
-import { columns } from "./columns"
+import { getColumns } from "./columns"
 import FilterDropdown from "./filter-dropdown";
 
 import NoPatientsImage from "~/svg/id-card.svg";
@@ -16,7 +16,8 @@ import {
     RotateCw,
     ChevronLeft,
     ChevronRight,
-    Plus
+    Plus,
+    CirclePlus
 } from "lucide-react"
 
 import {
@@ -58,7 +59,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import FilterButton from "./filter-button";
 
 const filterData = [
     { index: "test", value: "Test mode" },
@@ -118,7 +118,10 @@ const patientStatusData = [
     { index: "blacklisted", value: "Blacklisted" },
 ]
 
+const data: any[] = []
+
 export function PatientsTable() {
+    const columns = React.useMemo(() => getColumns(), [])
     const [date, setDate] = React.useState<Date>();
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -128,7 +131,7 @@ export function PatientsTable() {
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
     const table = useReactTable({
-        data: [],
+        data: data,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -145,88 +148,105 @@ export function PatientsTable() {
             rowSelection,
         },
     })
+
+    const handleSetData = React.useCallback((date: Date | undefined) => {
+        setDate(date)
+    }, [])
+
+    const handleSearchChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        table.getColumn("email")?.setFilterValue(event.target.value)
+    }, [])
     return (
         <div className="w-full border border-gray-300 mt-6 rounded-lg">
-            <div className="flex items-center pt-4 px-4 gap-2">
-                <Input
-                    placeholder="Search by Patient ID, name, email, phone number, MRN#"
-                    value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("email")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-[420px] outline-none focus:outline-none focus:border-none"
-                />
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                            variant="outline"
-                            data-empty={!date}
-                            className="justify-start text-gray-500 font-bold px-3 w-[160px] hover:bg-blue-300 hover:text-white"
-                        >
-                            <CalendarIcon />
-                            {date ? format(date, "PPP") : <span>Pick a date</span>}
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto flex p-2">
-                        <Calendar
-                            mode="single"
-                            selected={date}
-                            numberOfMonths={2}
-                            onSelect={(date) => {
-                                setDate(date)
-                            }}
-                        />
-                    </PopoverContent>
-                </Popover>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className='flex relative justify-center items-center border border-gray-300 p-3 bg-white hover:bg-blue-300 text-gray-500 hover:text-white'>
-                            <ListFilter />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <FilterDropdown data={filterData} placeholder="Filter by" />
-                </DropdownMenu>
-                <Button
-                    variant="outline"
-                    data-empty={!date}
-                    className="justify-start text-gray-500 font-bold px-3 hover:bg-blue-300 hover:text-white"
-                >
-                    <Repeat />
-                    <span>Reset Filters</span>
-                </Button>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className='flex relative justify-center items-center border border-gray-300 font-bold p-3 bg-white hover:bg-blue-300 text-gray-500 hover:text-white'>
-                            <Settings2 />
-                            <span>View</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <FilterDropdown data={viewData} placeholder="View" height />
-                </DropdownMenu>
-                <Button variant="ghost" className='flex relative justify-center items-center border border-gray-300 font-bold p-3 bg-white hover:bg-blue-300 text-gray-500 hover:text-white'>
-                    <Download />
-                    <span>Export</span>
-                </Button>
-                <Button variant="ghost" className='flex relative justify-center items-center border border-gray-300 font-bold p-3 bg-white hover:bg-blue-300 text-gray-500 hover:text-white'>
-                    <RotateCw />
-                </Button>
+            <div className="flex items-center justify-between pt-4 px-4 gap-2">
+                <div className="flex justify-start gap-2 flex-1">
+                    <Input
+                        placeholder="Search by Patient ID, name, email, phone number, MRN#"
+                        value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+                        onChange={handleSearchChange}
+                        className="min-w-[420px] max-w-[672px] outline-none focus:outline-none focus:border-none flex-1"
+                    />
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="outline"
+                                data-empty={true}
+                                className="flex-1 justify-start text-gray-500 font-bold px-3 min-w-[160px] max-w-[260px] hover:bg-blue-300 hover:text-white"
+                            >
+                                <CalendarIcon />
+                                {date ? format(date, "PPP") : <span>Pick a date</span>}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto flex p-2">
+                            <Calendar
+                                mode="single"
+                                selected={date}
+                                numberOfMonths={2}
+                                onSelect={handleSetData}
+                            />
+                        </PopoverContent>
+                    </Popover>
+                </div>
+                <div className="flex justify-start gap-2">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className='flex relative justify-center items-center border border-gray-300 p-3 bg-white hover:bg-blue-300 text-gray-500 hover:text-white'>
+                                <ListFilter />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <FilterDropdown data={filterData} placeholder="Filter by" />
+                    </DropdownMenu>
+                    <Button
+                        variant="outline"
+                        data-empty={true}
+                        className="justify-start text-gray-500 font-bold px-3 hover:bg-blue-300 hover:text-white"
+                    >
+                        <Repeat />
+                        <span>Reset Filters</span>
+                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className='flex relative justify-center items-center border border-gray-300 font-bold p-3 bg-white hover:bg-blue-300 text-gray-500 hover:text-white'>
+                                <Settings2 />
+                                <span>View</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <FilterDropdown data={viewData} placeholder="View" height />
+                    </DropdownMenu>
+                    <Button variant="ghost" className='flex relative justify-center items-center border border-gray-300 font-bold p-3 bg-white hover:bg-blue-300 text-gray-500 hover:text-white'>
+                        <Download />
+                        <span>Export</span>
+                    </Button>
+                    <Button variant="ghost" className='flex relative justify-center items-center border border-gray-300 font-bold p-3 bg-white hover:bg-blue-300 text-gray-500 hover:text-white'>
+                        <RotateCw />
+                    </Button>
+                </div>
             </div>
             <div className="flex items-start px-4 pt-2 pb-8 gap-2">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <FilterButton text="Refills" />
+                        <Button variant="ghost" className='flex relative justify-center items-center border border-gray-400 p-3 bg-white hover:bg-blue-300 text-gray-600 hover:text-white h-8 font-bold'>
+                            <CirclePlus />
+                            <span>Refills</span>
+                        </Button>
                     </DropdownMenuTrigger>
                     <FilterDropdown data={refillsData} placeholder="Refills" />
                 </DropdownMenu>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <FilterButton text="Visit Status" />
+                        <Button variant="ghost" className='flex relative justify-center items-center border border-gray-400 p-3 bg-white hover:bg-blue-300 text-gray-600 hover:text-white h-8 font-bold'>
+                            <CirclePlus />
+                            <span>Visit Status</span>
+                        </Button>
                     </DropdownMenuTrigger>
                     <FilterDropdown data={visitStatusData} placeholder="Visit status" />
                 </DropdownMenu>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <FilterButton text="Patient Status" />
+                        <Button variant="ghost" className='flex relative justify-center items-center border border-gray-400 p-3 bg-white hover:bg-blue-300 text-gray-600 hover:text-white h-8 font-bold'>
+                            <CirclePlus />
+                            <span>Patient Status</span>
+                        </Button>
                     </DropdownMenuTrigger>
                     <FilterDropdown data={patientStatusData} placeholder="Patient status" height />
                 </DropdownMenu>

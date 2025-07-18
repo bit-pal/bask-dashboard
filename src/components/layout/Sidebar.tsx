@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import React, { Fragment, useCallback, useMemo, useState } from 'react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -31,7 +31,12 @@ interface SidebarProps {
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Patients', href: '/patients', icon: UserRoundCheck },
-  { name: 'Treatments', href: '/treatments', icon: Bandage },
+  {
+    name: 'Treatments', icon: Bandage, subMenu: [
+      { name: 'Treatments', href: '/treatments' },
+      { name: 'Configs', href: '/treatements/configs' }
+    ]
+  },
   { name: 'Orders', href: '/orders', icon: BookPlus },
   { name: 'Prescriptions', href: '/prescriptions', icon: Scroll },
   { name: 'Messages', href: '/messages', icon: MessageCircleMore },
@@ -52,6 +57,23 @@ const bottomNavigations = [
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
+
+  const initSelectedRoot = useMemo(() => {
+    const root = navigation.find((item) => {
+      if (item.subMenu?.length) {
+        return item.subMenu.some(subItem => subItem.href === pathname)
+      }
+      return false
+    })
+    return root?.name || '';
+  }, [pathname])
+
+  const [selectedRoot, setRoot] = useState(initSelectedRoot)
+  const handleClickRoot = useCallback((name: string) => () => {
+    setRoot((prev) => {
+      return prev === name ? '' : name;
+    })
+  }, [])
 
   return (
     <>
@@ -83,25 +105,43 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             {navigation.map((item) => {
               const isActive = pathname === item.href;
               return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`
-                    group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200
-                    ${isActive
-                      ? 'bg-indigo-100 text-indigo-700 border-indigo-500'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                    }
-                  `}
-                >
-                  <item.icon
+                <Fragment key={item.name}>
+                  <Link
+                    key={item.name}
+                    href={item.href || '#'}
+                    onClick={handleClickRoot(item.name)}
                     className={`
-                      mr-3 h-5 w-5 flex-shrink-0
-                      ${isActive ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500'}
+                      group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200
+                      ${isActive
+                        ? 'bg-indigo-100 text-indigo-700 border-indigo-500'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      }
                     `}
-                  />
-                  {item.name}
-                </Link>
+                  >
+                    <item.icon
+                      className={`
+                        mr-3 h-5 w-5 flex-shrink-0
+                        ${isActive ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500'}
+                      `}
+                    />
+                    {item.name}
+                  </Link>
+                  {item.subMenu?.length && selectedRoot === item.name && (
+                    <div className='ml-5 pl-2 border-l border-solid'>
+                      {item.subMenu.map(subItem => (
+                        <Link key={item.name + '_' + subItem.name} href={subItem.href}
+                          className={`
+                            group flex items-center px-3 py-2 text-[12px] font-medium rounded-md transition-colors duration-200
+                            ${pathname === subItem.href
+                              ? 'bg-indigo-100 text-indigo-700 border-indigo-500'
+                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            }
+                          `}>
+                          {subItem.name}
+                        </Link>))}
+                    </div>
+                  )}
+                </Fragment>
               );
             })}
           </div>
